@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tech.math.agregadorinvestimentos.entity.User;
 import tech.math.agregadorinvestimentos.service.UserService;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/v1/users")
@@ -47,6 +49,14 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() {
         var users = userService.getAllUsers();
         return ResponseEntity.ok(users);
+        }
+
+        @PutMapping("/{userId}")
+        public ResponseEntity<Void> updateUserbyId(@PathVariable("userId") String userId,
+        @RequestBody UpdateUserDto updateUserDto) {
+            userService.updateUserById(userId, updateUserDto);
+            return ResponseEntity.noContent().build();
+            
         }
 
        @DeleteMapping("/{userId}")

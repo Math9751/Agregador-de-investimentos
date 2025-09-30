@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import tech.math.agregadorinvestimentos.controller.CreateUserDto;
+import tech.math.agregadorinvestimentos.controller.UpdateUserDto;
 import tech.math.agregadorinvestimentos.entity.User;
 import tech.math.agregadorinvestimentos.repository.UserRepository;
 
@@ -41,6 +42,21 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public void updateUserById(String userId, UpdateUserDto updateUserDto) {
+        var id = UUID.fromString(userId);
+        var userEntity = userRepository.findById(id);
+        if (userEntity.isPresent()) {
+            var user = userEntity.get();
+            if (updateUserDto.username() != null) {
+                user.setUsername(updateUserDto.username());
+            }
+            if (updateUserDto.password() != null) {
+                user.setPassword(updateUserDto.password());
+            }
+            userRepository.save(user);
+    }  
+    }
+
     public void deleteUser(String userId) {
         var id = UUID.fromString(userId);
         var userExists = userRepository.existsById(id);
@@ -49,5 +65,7 @@ public class UserService {
         } else {
             throw new IllegalArgumentException("User with ID " + userId + " does not exist.");
         }
-    }   
+    }
+
+     
 }
